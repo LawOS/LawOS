@@ -17,7 +17,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.mysql.jdbc.Statement;
 
-import javafx.stage.WindowBuilder;
+
 
 import java.awt.Font;
 import javax.swing.JPasswordField;
@@ -83,7 +83,7 @@ public class loginPage {
 				try {
 					conn = DriverManager.getConnection("jdbc:mysql://phpmyadmin.in.cs.ucy.ac.cy/cs363db?" + "user=cs363db&password=NjFU2pKz");
 				} catch (SQLException ex) {
-					// handle any errors
+					// handle any errors0
 					System.out.println("SQLException: " + ex.getMessage());
 					System.out.println("SQLState: " + ex.getSQLState());
 					System.out.println("VendorError: " + ex.getErrorCode());
