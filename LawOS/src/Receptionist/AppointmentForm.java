@@ -11,12 +11,23 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.client.Entity;
+
+
+import org.glassfish.jersey.client.ClientConfig;
 
 import GUI.loginPage;
 
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
 
 public class AppointmentForm {
 
@@ -24,6 +35,7 @@ public class AppointmentForm {
 	private JTextField year_txt;
 	private JTextField client_txt;
 	private JTextField lawyer_txt;
+	private JTextField case_txt;
 	
 	/**
 	 * Launch the application.
@@ -53,7 +65,7 @@ public class AppointmentForm {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 407);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JLabel lblAppointmentForm = new JLabel("Appointment Form");
@@ -89,17 +101,37 @@ public class AppointmentForm {
 				String hour = cb_hour.getSelectedItem().toString() + ":" + cb_minutes.getSelectedItem().toString();
 				String clientID = client_txt.getText();
 				String lawyer = lawyer_txt.getText();
+				String caseID = case_txt.getText();
 				
 				//check for empty text boxes
-				if(date.equals("") || hour.equals("") || clientID.equals("") || lawyer.equals("")){
+				if(date.equals("") || hour.equals("") || clientID.equals("") || lawyer.equals("") || caseID.equals("")){
 					JOptionPane.showMessageDialog(frame, "Fill all fields");
 					return;
 				}
-				
-				System.out.println(date + " " + hour + " " + clientID + " " + lawyer);
+
 				
 				//request
+				ClientConfig config = new ClientConfig();
+				Client client = ClientBuilder.newClient(config);
+				WebTarget target = client.target(getBaseURI());
+				Form form = new Form();
+				form.param("date", date);
+				form.param("time", hour);
+				form.param("clientID", clientID);
+				form.param("legalStaffID", lawyer);
+				form.param("caseID", caseID);
+				String res2 = target.path("rest").path("lawos").path("receptionist").path("newapp").request()
+						.accept(MediaType.APPLICATION_JSON)
+						.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
+				
+				if (res2.equals("1")){
+					JOptionPane.showMessageDialog(frame, "Appointment Inserted Successfully");
+				}
+				else{
+					JOptionPane.showMessageDialog(frame, "Wrong Insert");
+				}
 			}
+			
 		});
 		
 		JButton btnGoBack = new JButton("Go Back");
@@ -131,6 +163,11 @@ public class AppointmentForm {
 				f.main(null);
 			}
 		});
+		
+		JLabel lblCase = new JLabel("Case");
+		
+		case_txt = new JTextField();
+		case_txt.setColumns(10);
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -142,13 +179,22 @@ public class AppointmentForm {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblTime, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(lblDate, GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+									.addComponent(lblTime, GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+									.addComponent(lblCase, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 								.addComponent(lblNewLabel_1))
 							.addGap(49)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(case_txt, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lawyer_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnSubmit)
+									.addGap(18)
+									.addComponent(btnGoBack)
+									.addGap(18)
+									.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
 								.addComponent(client_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
@@ -161,14 +207,7 @@ public class AppointmentForm {
 											.addGap(18)
 											.addComponent(cb_month, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 									.addGap(18)
-									.addComponent(year_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnSubmit)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnGoBack)
-									.addGap(18)
-									.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)))))
+									.addComponent(year_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap(84, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -189,19 +228,26 @@ public class AppointmentForm {
 						.addComponent(cb_minutes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblCase)
+						.addComponent(case_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel)
 						.addComponent(client_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1)
 						.addComponent(lawyer_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addGap(25)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnSubmit)
 						.addComponent(btnGoBack)
 						.addComponent(btnLogout))
-					.addGap(26))
+					.addGap(102))
 		);
 		frame.getContentPane().setLayout(groupLayout);
+	}
+	private static URI getBaseURI() {
+		return UriBuilder.fromUri("http://localhost/LawOSREST/").build();
 	}
 }

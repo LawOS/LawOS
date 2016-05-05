@@ -1,8 +1,5 @@
 package GUI;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
 
 import java.awt.EventQueue;
@@ -14,16 +11,28 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
 
-import com.mysql.jdbc.Statement;
+import org.glassfish.jersey.client.ClientConfig;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-
+import Receptionist.ReceptionistViewpoint;
 
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
 import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class loginPage {
 
@@ -59,52 +68,82 @@ public class loginPage {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 382, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JLabel lblUsername = new JLabel("Username:");
-
+		JComboBox cb_type = new JComboBox();
 		userName_txt = new JTextField();
 		userName_txt.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password:");
 
 		JButton btnLogin = new JButton("LogIn");
+	
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//initialize variables
 				String username = userName_txt.getText();
 				String password = password_txt.getText();
+				String type = cb_type.getSelectedItem().toString();
+				
+				//check for empty fields
 				if(username.equals("") || password.equals("")){
 					JOptionPane.showMessageDialog(frame, "Fill the fields");
 					return;
 				}
-				Connection conn = null;
+				
+				ClientConfig config = new ClientConfig();
+				Client client = ClientBuilder.newClient(config);
+				WebTarget target = client.target(getBaseURI());
+				
+				Form form = new Form();
+				form.param("user", username);
+				form.param("pass", password);
+				
+				if(type.equals("Legal Staff"))
+					form.param("type", "legalstaff");
+				else if(type.equals("Receptionist"))
+					form.param("type", "receptionist");
+				else if(type.equals("Legal Records Staff"))
+					form.param("type", "legalrecordsstaff");
+				else if(type.equals("Head Office Management"))
+					form.param("type", "headoffice");
+					
+				String res = target.path("rest").path("lawos").request().accept(MediaType.APPLICATION_JSON)
+						.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
+				
+				JSONObject json = null;
+				JSONObject json2 = null;
 				try {
-					conn = DriverManager.getConnection("jdbc:mysql://phpmyadmin.in.cs.ucy.ac.cy/cs363db?" + "user=cs363db&password=NjFU2pKz");
-				} catch (SQLException ex) {
-					// handle any errors0
-					System.out.println("SQLException: " + ex.getMessage());
-					System.out.println("SQLState: " + ex.getSQLState());
-					System.out.println("VendorError: " + ex.getErrorCode());
-				}
-				Statement stmt = null;
-				ResultSet rs = null;
-				try {
-					stmt = (Statement) conn.createStatement();
-					rs = stmt.executeQuery("SELECT * FROM legalstaff WHERE username = '" + username + "' AND password = " + password);
-					if (!rs.isBeforeFirst()){
-						rs = stmt.executeQuery("SELECT * FROM receptionist WHERE username = '" + username + "' AND password = " + password);
-						if (!rs.isBeforeFirst()){
-							JOptionPane.showMessageDialog(frame, "Wrong username or password");
+					json = new JSONObject(res);
+					if(json.get("size").equals("1")){
+						/*json2 = new JSONObject(json.get("results_array").toString().substring(1,
+							json.get("results_array").toString().length() - 1));*/
+						frame.setVisible(false);
+						if(type.equals("Legal Staff")){
+							/*call viewpoint*/
+						}
+						else if(type.equals("Receptionist")){
+							ReceptionistViewpoint f = new ReceptionistViewpoint();
+							f.main(null);
+						}
+						else if(type.equals("Legal Records Staff")){
+							/*call viewpoint*/
+						}
+						else if(type.equals("Head Office Management")){
+							/*call viewpoint*/
 						}
 					}
-					while(rs.next()){
-						System.out.println(rs.getString("Name"));
+					else{
+						JOptionPane.showMessageDialog(frame, "Wrong username or password");
 					}
-				} catch (SQLException e1) {
+					
+					
+				} catch (JSONException e2) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e2.printStackTrace();
 				}
 
 
@@ -128,44 +167,54 @@ public class loginPage {
 		lblWelcomeToLawos.setFont(new Font("Arial", Font.BOLD, 18));
 
 		password_txt = new JPasswordField();
+		
+		
+		cb_type.setModel(new DefaultComboBoxModel(new String[] {"Legal Staff", "Receptionist", "Legal Records Staff", "Head Office Management"}));
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(42)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblWelcomeToLawos, GroupLayout.PREFERRED_SIZE, 241, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-												.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-												.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))
-										.addGap(57)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(btnExit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(password_txt, GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-												.addComponent(userName_txt, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))))
-						.addGap(151))
-				);
+					.addGap(42)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnExit, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+						.addComponent(password_txt, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+						.addComponent(userName_txt, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+						.addComponent(cb_type, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(151))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(92)
+					.addComponent(lblWelcomeToLawos)
+					.addContainerGap(166, Short.MAX_VALUE))
+		);
 		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(24)
-						.addComponent(lblWelcomeToLawos)
-						.addGap(18)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-								.addComponent(userName_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-								.addComponent(password_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnLogin)
-								.addComponent(btnExit))
-						.addContainerGap(78, Short.MAX_VALUE))
-				);
+					.addGap(24)
+					.addComponent(lblWelcomeToLawos)
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(userName_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(password_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(cb_type, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(33)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnExit)
+						.addComponent(btnLogin))
+					.addContainerGap(32, Short.MAX_VALUE))
+		);
 		frame.getContentPane().setLayout(groupLayout);
+	}
+	private static URI getBaseURI() {
+		return UriBuilder.fromUri("http://localhost/LawOSREST/").build();
 	}
 }

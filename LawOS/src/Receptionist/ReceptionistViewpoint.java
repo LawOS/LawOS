@@ -51,7 +51,7 @@ public class ReceptionistViewpoint {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 389);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btnNewButton = new JButton("New Appointment\r\n");
@@ -116,6 +116,16 @@ public class ReceptionistViewpoint {
 				f.main(null);
 			}
 		});
+		
+		JButton btnDeleteAppointment = new JButton("Delete Appointment");
+		btnDeleteAppointment.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				frame.setVisible(false);
+				DeleteAppointment f = new DeleteAppointment();
+				f.main(null);
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -132,10 +142,12 @@ public class ReceptionistViewpoint {
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(btnViewAppointments, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
 									.addComponent(btnViewUncompletedAppointments, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnDeleteAppointment, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))))
 					.addGap(157))
 		);
 		groupLayout.setVerticalGroup(
@@ -145,7 +157,9 @@ public class ReceptionistViewpoint {
 					.addComponent(lblReceptionist)
 					.addGap(18)
 					.addComponent(btnNewButton)
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnDeleteAppointment)
+					.addGap(14)
 					.addComponent(btnViewAppointments)
 					.addGap(18)
 					.addComponent(btnViewUncompletedAppointments)
@@ -155,7 +169,7 @@ public class ReceptionistViewpoint {
 						.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(23, Short.MAX_VALUE))
+					.addContainerGap(132, Short.MAX_VALUE))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 	}
