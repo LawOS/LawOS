@@ -22,6 +22,7 @@ public class ReceptionistViewpoint {
 
 	private JFrame frame;
 	private JTextField clientsearch_txt;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -51,7 +52,7 @@ public class ReceptionistViewpoint {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 389);
+		frame.setBounds(100, 100, 450, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btnNewButton = new JButton("New Appointment\r\n");
@@ -96,11 +97,10 @@ public class ReceptionistViewpoint {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				String clientID = clientsearch_txt.getText();
-				
-				//request
+
 				
 				frame.setVisible(false);
-				ViewClient f = new ViewClient();
+				ViewClient f = new ViewClient(clientID);
 				f.main(clientID);
 			}
 		});
@@ -126,6 +126,23 @@ public class ReceptionistViewpoint {
 				f.main(null);
 			}
 		});
+		
+		JButton btnViewFaildAppointments = new JButton("View Faild Appointments");
+		btnViewFaildAppointments.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				frame.setVisible(false);
+				FaildAppointments f = new FaildAppointments();
+				f.main(null);
+			}
+		});
+		
+		textField = new JTextField();
+		textField.setText("Search For Client");
+		textField.setColumns(10);
+		
+		JButton button = new JButton("");
+		button.setIcon(new ImageIcon("C:\\Users\\Andreas\\Documents\\EPL362\\EPL362_lawOSDB\\images\\Search.png"));
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -136,19 +153,22 @@ public class ReceptionistViewpoint {
 							.addComponent(lblReceptionist))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(28)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnViewAppointments, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+								.addComponent(btnViewUncompletedAppointments, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnViewFaildAppointments, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnDeleteAppointment, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(clientsearch_txt, 194, 194, 194)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(btnViewAppointments, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-									.addComponent(btnViewUncompletedAppointments, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnDeleteAppointment, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))))
-					.addGap(157))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+									.addGap(10)
+									.addComponent(button, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnLogout, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))))
+					.addGap(190))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -164,12 +184,18 @@ public class ReceptionistViewpoint {
 					.addGap(18)
 					.addComponent(btnViewUncompletedAppointments)
 					.addGap(18)
+					.addComponent(btnViewFaildAppointments)
+					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(clientsearch_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(button, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+					.addGap(22)
 					.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(132, Short.MAX_VALUE))
+					.addContainerGap(36, Short.MAX_VALUE))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 	}
