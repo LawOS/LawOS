@@ -189,7 +189,7 @@ public class AppointmentForm {
 		branch_txt = new JTextField();
 		branch_txt.setColumns(10);
 		
-		JLabel lblNewLabel_2 = new JLabel("Recomandation");
+		JLabel lblNewLabel_2 = new JLabel("Recommendation");
 		
 		recomandation_txt = new JTextField();
 		recomandation_txt.setColumns(10);

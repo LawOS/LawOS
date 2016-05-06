@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import HOM.HOMViewpoint;
 import LRS.LRSViewpoint;
+import LegalStaff.LegalStaffViewpoint;
 import Receptionist.ReceptionistViewpoint;
 
 import java.awt.Font;
@@ -121,11 +122,10 @@ public class loginPage {
 				try {
 					json = new JSONObject(res);
 					if(json.get("size").equals("1")){
-						/*json2 = new JSONObject(json.get("results_array").toString().substring(1,
-							json.get("results_array").toString().length() - 1));*/
 						frame.setVisible(false);
 						if(type.equals("Legal Staff")){
-							/*call viewpoint*/
+							LegalStaffViewpoint f = new LegalStaffViewpoint();
+							f.main(null);
 						}
 						else if(type.equals("Receptionist")){
 							ReceptionistViewpoint f = new ReceptionistViewpoint();
