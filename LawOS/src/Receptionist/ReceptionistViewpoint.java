@@ -7,6 +7,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -22,7 +24,6 @@ public class ReceptionistViewpoint {
 
 	private JFrame frame;
 	private JTextField clientsearch_txt;
-	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -60,7 +61,7 @@ public class ReceptionistViewpoint {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				frame.setVisible(false);
-				AppointmentForm f2 = new AppointmentForm();
+				AppointmentForm f2 = new AppointmentForm(null);
 				f2.main(null);
 			}
 		});
@@ -79,7 +80,7 @@ public class ReceptionistViewpoint {
 		});
 		
 		clientsearch_txt = new JTextField();
-		clientsearch_txt.setText("Search For Client");
+		clientsearch_txt.setToolTipText("");
 		clientsearch_txt.setColumns(10);
 		
 		JButton btnViewUncompletedAppointments = new JButton("View Uncompleted Appointments");
@@ -96,9 +97,12 @@ public class ReceptionistViewpoint {
 		btn_Search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String clientID = clientsearch_txt.getText();
-
 				
+				String clientID = clientsearch_txt.getText();
+				if(clientID.equals("")){
+					JOptionPane.showMessageDialog(frame,"Enter a client id");
+					return;
+				}
 				frame.setVisible(false);
 				ViewClient f = new ViewClient(clientID);
 				f.main(clientID);
@@ -137,12 +141,7 @@ public class ReceptionistViewpoint {
 			}
 		});
 		
-		textField = new JTextField();
-		textField.setText("Search For Client");
-		textField.setColumns(10);
-		
-		JButton button = new JButton("");
-		button.setIcon(new ImageIcon("C:\\Users\\Andreas\\Documents\\EPL362\\EPL362_lawOSDB\\images\\Search.png"));
+		JLabel lblSearchForClient = new JLabel("Search for client");
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -159,16 +158,16 @@ public class ReceptionistViewpoint {
 								.addComponent(btnViewFaildAppointments, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(btnDeleteAppointment, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(clientsearch_txt, 194, 194, 194)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-									.addGap(10)
-									.addComponent(button, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnLogout, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))))
-					.addGap(190))
+								.addComponent(btnLogout, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+									.addComponent(lblSearchForClient)
+									.addGap(18)
+									.addComponent(clientsearch_txt, 194, 194, 194)))))
+					.addGap(116))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(367, Short.MAX_VALUE)
+					.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+					.addGap(55))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -187,15 +186,13 @@ public class ReceptionistViewpoint {
 					.addComponent(btnViewFaildAppointments)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(clientsearch_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblSearchForClient)
+							.addComponent(clientsearch_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btn_Search, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(button, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addGap(22)
+					.addGap(42)
 					.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(36, Short.MAX_VALUE))
+					.addContainerGap(53, Short.MAX_VALUE))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 	}

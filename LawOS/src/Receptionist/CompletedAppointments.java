@@ -140,7 +140,7 @@ public class CompletedAppointments {
 							JSONArray arr = json.getJSONArray("results_array");
 							model.addRow(new Object[]{arr.getJSONObject(i).getString("AppointmendID"), arr.getJSONObject(i).getString("Date"), arr.getJSONObject(i).getString("Time"),
 									arr.getJSONObject(i).getString("clientID"),arr.getJSONObject(i).getString("legalStaffID"),arr.getJSONObject(i).getString("Case"),
-									arr.getJSONObject(i).getString("Consultation"),arr.getJSONObject(i).getString("LegalOpinion")});
+									});
 						}
 					}
 				} catch (JSONException e2) {
@@ -244,15 +244,15 @@ public class CompletedAppointments {
 		table_1.setColumnSelectionAllowed(true);
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
+				{null, null, null, null, null, null},
 			},
 			new String[] {
-				"AppointmentID", "Date", "Time", "Client ID", "Legal Staff ID", "Case ID", "Consultation", "Legal Oppinion"
+				"AppointmentID", "Date", "Time", "Client ID", "Legal Staff ID", "Case ID"
 			}
 		));
 		table_1.getColumnModel().getColumn(0).setPreferredWidth(85);
 		table_1.getColumnModel().getColumn(2).setPreferredWidth(55);
 		table_1.getColumnModel().getColumn(4).setPreferredWidth(83);
-		table_1.getColumnModel().getColumn(7).setPreferredWidth(94);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 	private static URI getBaseURI() {

@@ -36,36 +36,40 @@ public class AppointmentForm {
 	private JTextField client_txt;
 	private JTextField lawyer_txt;
 	private JTextField case_txt;
+	private JTextField branch_txt;
+	private JTextField recomandation_txt;
+	private JTextField legalopinion_txt;
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AppointmentForm window = new AppointmentForm();
+					AppointmentForm window = new AppointmentForm(args);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		
 	}
 
 	/**
 	 * Create the application.
 	 */
-	public AppointmentForm() {
-		initialize();
+	public AppointmentForm(String clientID) {
+		initialize(clientID);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(String clientID) {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 407);
+		frame.setBounds(100, 100, 488, 436);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JLabel lblAppointmentForm = new JLabel("Appointment Form");
@@ -102,9 +106,12 @@ public class AppointmentForm {
 				String clientID = client_txt.getText();
 				String lawyer = lawyer_txt.getText();
 				String caseID = case_txt.getText();
+				String branchID = branch_txt.getText();
+				String recomandation = recomandation_txt.getText();
+				String legalopinion = legalopinion_txt.getText();
 				
 				//check for empty text boxes
-				if(date.equals("") || hour.equals("") || clientID.equals("") || lawyer.equals("") || caseID.equals("")){
+				if(date.equals("") || hour.equals("") || clientID.equals("") || lawyer.equals("") || caseID.equals("") || branchID.equals("")){
 					JOptionPane.showMessageDialog(frame, "Fill all fields");
 					return;
 				}
@@ -120,6 +127,10 @@ public class AppointmentForm {
 				form.param("clientID", clientID);
 				form.param("legalStaffID", lawyer);
 				form.param("caseID", caseID);
+				form.param("branchID", branchID);
+				form.param("recom", recomandation);
+				form.param("legalop", legalopinion);
+				
 				String res2 = target.path("rest").path("lawos").path("receptionist").path("newapp").request()
 						.accept(MediaType.APPLICATION_JSON)
 						.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
@@ -148,6 +159,10 @@ public class AppointmentForm {
 		
 		client_txt = new JTextField();
 		client_txt.setColumns(10);
+		if (clientID!=null){
+			client_txt.setText(clientID);
+			client_txt.setEditable(false);
+		}
 		
 		JLabel lblNewLabel_1 = new JLabel("Lawyer");
 		
@@ -168,6 +183,21 @@ public class AppointmentForm {
 		
 		case_txt = new JTextField();
 		case_txt.setColumns(10);
+		
+		JLabel lblBranch = new JLabel("Branch");
+		
+		branch_txt = new JTextField();
+		branch_txt.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Recomandation");
+		
+		recomandation_txt = new JTextField();
+		recomandation_txt.setColumns(10);
+		
+		JLabel lblLegalOp = new JLabel("Legal Opinion");
+		
+		legalopinion_txt = new JTextField();
+		legalopinion_txt.setColumns(10);
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -184,17 +214,17 @@ public class AppointmentForm {
 									.addComponent(lblTime, GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
 									.addComponent(lblCase, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addComponent(lblNewLabel_1))
-							.addGap(49)
+								.addComponent(lblNewLabel_1)
+								.addComponent(lblBranch)
+								.addComponent(lblNewLabel_2)
+								.addComponent(lblLegalOp))
+							.addGap(40)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(legalopinion_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(recomandation_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(branch_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(case_txt, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lawyer_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(btnSubmit)
-									.addGap(18)
-									.addComponent(btnGoBack)
-									.addGap(18)
-									.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
 								.addComponent(client_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
@@ -207,8 +237,14 @@ public class AppointmentForm {
 											.addGap(18)
 											.addComponent(cb_month, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 									.addGap(18)
-									.addComponent(year_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap(84, Short.MAX_VALUE))
+									.addComponent(year_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnSubmit)
+									.addGap(18)
+									.addComponent(btnGoBack)
+									.addGap(18)
+									.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)))))
+					.addContainerGap(56, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -238,12 +274,24 @@ public class AppointmentForm {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1)
 						.addComponent(lawyer_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(25)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblBranch)
+						.addComponent(branch_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_2)
+						.addComponent(recomandation_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblLegalOp)
+						.addComponent(legalopinion_txt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(31)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnSubmit)
 						.addComponent(btnGoBack)
 						.addComponent(btnLogout))
-					.addGap(102))
+					.addGap(26))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 	}

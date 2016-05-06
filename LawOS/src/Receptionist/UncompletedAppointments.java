@@ -122,7 +122,7 @@ public class UncompletedAppointments {
 							JSONArray arr = json.getJSONArray("results_array");
 							model.addRow(new Object[]{arr.getJSONObject(i).getString("AppointmendID"), arr.getJSONObject(i).getString("Date"), arr.getJSONObject(i).getString("Time"),
 									arr.getJSONObject(i).getString("clientID"),arr.getJSONObject(i).getString("legalStaffID"),arr.getJSONObject(i).getString("Case"),
-									arr.getJSONObject(i).getString("Consultation"),arr.getJSONObject(i).getString("LegalOpinion")});
+									});
 						}
 					}
 				} catch (JSONException e2) {
@@ -162,15 +162,10 @@ public class UncompletedAppointments {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(204)
-							.addComponent(lblUncompletedAppointments))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 617, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(28, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addGap(204)
+					.addComponent(lblUncompletedAppointments)
+					.addContainerGap(238, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(52)
 					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 					.addGap(53)
@@ -180,15 +175,19 @@ public class UncompletedAppointments {
 					.addGap(60)
 					.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 					.addGap(49))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 617, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(28, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblUncompletedAppointments, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-					.addGap(35)
+					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(button_1)
 						.addComponent(button)
@@ -203,11 +202,11 @@ public class UncompletedAppointments {
 			new Object[][] {
 			},
 			new String[] {
-				"AppointmentID", "Date", "Time", "ClientID", "Legal Staff", "Case", "Consultation", "Legal Opinion", "Completed"
+				"AppointmentID", "Date", "Time", "ClientID", "Legal Staff", "Case", "Completed"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Boolean.class
+				String.class, Object.class, Object.class, Object.class, Object.class, Object.class,Boolean.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];

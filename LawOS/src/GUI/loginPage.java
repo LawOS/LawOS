@@ -23,6 +23,8 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import HOM.HOMViewpoint;
+import LRS.LRSViewpoint;
 import Receptionist.ReceptionistViewpoint;
 
 import java.awt.Font;
@@ -130,10 +132,12 @@ public class loginPage {
 							f.main(null);
 						}
 						else if(type.equals("Legal Records Staff")){
-							/*call viewpoint*/
+							LRSViewpoint f = new LRSViewpoint();
+							f.main(null);
 						}
 						else if(type.equals("Head Office Management")){
-							/*call viewpoint*/
+							HOMViewpoint f = new HOMViewpoint();
+							f.main(null);
 						}
 					}
 					else{
@@ -145,8 +149,6 @@ public class loginPage {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-
-
 
 
 
