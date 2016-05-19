@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +43,7 @@ public class loginPage {
 	private JFrame frame;
 	private JTextField userName_txt;
 	private JPasswordField password_txt;
+	public static String UserID;
 
 	/**
 	 * Launch the application.
@@ -123,6 +125,8 @@ public class loginPage {
 					json = new JSONObject(res);
 					if(json.get("size").equals("1")){
 						frame.setVisible(false);
+						JSONArray arr = json.getJSONArray("results_array");
+						UserID = arr.getJSONObject(0).getString("ID");
 						if(type.equals("Legal Staff")){
 							LegalStaffViewpoint f = new LegalStaffViewpoint();
 							f.main(null);

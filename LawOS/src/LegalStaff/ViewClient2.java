@@ -173,7 +173,35 @@ public class ViewClient2 {
 		btnSubmit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				String name = name_txt.getText();
+				String surname = surname_txt.getText();
+				String id = id_txt.getText();
+				String unwillingness = unwillingness_txt.getText();
+				String comments = comments_txt.getText();
 				
+
+				//request
+				ClientConfig config = new ClientConfig();
+				Client client = ClientBuilder.newClient(config);
+				WebTarget target = client.target(getBaseURI());
+				Form form = new Form();
+				form.param("ID", id);
+				form.param("Name", name);
+				form.param("Surname", surname);
+				form.param("Unwillingness", unwillingness);
+				form.param("Comments", comments);
+				
+				
+				String res2 = target.path("rest").path("lawos").path("lrs").path("edit").path("client").request()
+						.accept(MediaType.APPLICATION_JSON)
+						.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
+				
+				if (res2.equals("1")){
+					JOptionPane.showMessageDialog(frame, "Client Edited Successfully");
+				}
+				else{
+					JOptionPane.showMessageDialog(frame, "Wrong Insert");
+				}
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());

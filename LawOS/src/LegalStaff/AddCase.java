@@ -22,6 +22,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import GUI.loginPage;
 
@@ -134,7 +137,7 @@ public class AddCase {
 				}
 
 				
-				//request
+				//request 1
 				ClientConfig config = new ClientConfig();
 				Client client = ClientBuilder.newClient(config);
 				WebTarget target = client.target(getBaseURI());
@@ -151,6 +154,56 @@ public class AddCase {
 				
 				if (res2.equals("1")){
 					JOptionPane.showMessageDialog(frame, "Case Inserted Successfully");
+					//request 2
+					config = new ClientConfig();
+					client = ClientBuilder.newClient(config);
+					target = client.target(getBaseURI());
+					form = new Form();
+					form.param("ClientID", clientID);
+					
+					
+					res2 = target.path("rest").path("lawos").path("ls").path("view").path("client").path("isml").request()
+							.accept(MediaType.APPLICATION_JSON)
+							.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
+					
+					JSONObject json = null;
+					try {
+						json = new JSONObject(res2);
+						JSONArray arr = json.getJSONArray("results_array");
+						if(arr.getJSONObject(0).getString("COUNT(DISTINCT Flagged_ml)").equals("1")){
+							JOptionPane.showMessageDialog(frame, "This client involved in money laudring!","Dialog",JOptionPane.WARNING_MESSAGE);
+						}
+						
+					} catch (JSONException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					//request 3
+					config = new ClientConfig();
+					client = ClientBuilder.newClient(config);
+					target = client.target(getBaseURI());
+					form = new Form();
+					form.param("ClientID", clientID);
+					
+					
+					res2 = target.path("rest").path("lawos").path("ls").path("view").path("client").path("unw").request()
+							.accept(MediaType.APPLICATION_JSON)
+							.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED), String.class);
+					
+					json = null;
+					try {
+						json = new JSONObject(res2);
+						JSONArray arr = json.getJSONArray("results_array");
+						if(!arr.getJSONObject(0).getString("Unwillingness").equals("null") && !arr.getJSONObject(0).getString("Unwillingness").equals("")){
+							JOptionPane.showMessageDialog(frame, "Unwillingness:\n" + arr.getJSONObject(0).getString("Unwillingness"),"Dialog",JOptionPane.WARNING_MESSAGE);
+						}
+						
+					} catch (JSONException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
 				}
 				else{
 					JOptionPane.showMessageDialog(frame, "Wrong Insert");

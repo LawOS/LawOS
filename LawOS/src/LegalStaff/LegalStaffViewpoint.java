@@ -124,8 +124,6 @@ public class LegalStaffViewpoint {
 			}
 		});
 		
-		JButton btnEditAClient = new JButton("Edit A Client");
-		
 		JButton btnViewStrategySide = new JButton("View Strategy Side Effects");
 		btnViewStrategySide.addMouseListener(new MouseAdapter() {
 			@Override
@@ -136,7 +134,7 @@ public class LegalStaffViewpoint {
 			}
 		});
 		
-		JButton btnNewButton = new JButton("Check If A Client Is Money Laudring Involved");
+		JButton btnNewButton = new JButton("<html>Check If A Client Is Money<br> Laudring Involved</html>");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -145,9 +143,19 @@ public class LegalStaffViewpoint {
 				f.main(null);
 			}
 		});
+		
+		JButton btnNewButton_1 = new JButton("MailBox");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				frame.setVisible(false);
+				MailBox f = new MailBox();
+				f.main(null);
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -155,23 +163,22 @@ public class LegalStaffViewpoint {
 							.addComponent(lblLegalStaffViewpoint))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnAddCase, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnViewAllAppointments, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnEditAppointment, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-								.addComponent(btnEditCase, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(btnAddCase, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnViewAllAppointments, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnEditAppointment, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+									.addComponent(btnEditCase, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
 							.addGap(75)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(btnViewClient, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnEditAClient, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-								.addComponent(btnViewAllCases, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnViewStrategySide, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-					.addContainerGap(21, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(175, Short.MAX_VALUE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 159, Short.MAX_VALUE)
+								.addComponent(btnViewStrategySide, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnViewAllCases, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnViewClient, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+					.addContainerGap(40, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap(191, Short.MAX_VALUE)
 					.addComponent(btnLogout, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 					.addGap(169))
 		);
@@ -183,26 +190,27 @@ public class LegalStaffViewpoint {
 					.addGap(12)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnEditAppointment)
-						.addComponent(btnEditAClient))
+						.addComponent(btnViewClient))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnViewAllAppointments)
-						.addComponent(btnViewClient))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAddCase)
 						.addComponent(btnViewAllCases))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnEditCase)
+						.addComponent(btnAddCase)
 						.addComponent(btnViewStrategySide))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-					.addComponent(btnLogout)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+							.addComponent(btnLogout))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnEditCase)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		frame.getContentPane().setLayout(groupLayout);
 	}
-
 }
